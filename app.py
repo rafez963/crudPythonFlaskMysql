@@ -2,14 +2,18 @@
 from pydoc import render_doc
 from flask import Flask
 from flask_mysqldb import MySQL
-from flask import Flask, request, render_template
+from flask import Flask, request, render_template, redirect, url_for,flash
 
 
+#mysql connection
 app = Flask(__name__)
 app.config['MySQL_HOST'] = 'localhost'
 app.config['MySQL_USER'] = 'root'
 app.config['MySQL_PASSWORD'] = ''
 app.config['MySQL_DB'] = 'flaskcontacts'
+
+#settings
+app.secret_key = 'mysecretkey'
 
 mysql = MySQL(app)
 
@@ -30,9 +34,8 @@ def add_contact():
 
         mysql.connection.commit()
 
- 
-
-    return 'recived'
+        flash('Contact added successfully')
+        return redirect(url_for('index'))
 
 @app.route('/edit')
 def edit_contac():
