@@ -8,7 +8,7 @@ from flask import Flask, request, render_template
 app = Flask(__name__)
 app.config['MySQL_HOST'] = 'localhost'
 app.config['MySQL_USER'] = 'root'
-app.config['MySQL_PASSWORD'] = 'password'
+app.config['MySQL_PASSWORD'] = ''
 app.config['MySQL_DB'] = 'flaskcontacts'
 
 mysql = MySQL(app)
@@ -24,10 +24,13 @@ def add_contact():
         phone = request.form['phone']
         email = request.form['email']
 
-        print(fullname)
-        print(phone)
-        print(email)
+        cur = mysql.connection.cursor()
+        cur.execute('INSERT INTO contacts (fullname,phone,email) VALUES (%s, %s, %s)',
+        (fullname, phone, email))
 
+        mysql.connection.commit()
+
+ 
 
     return 'recived'
 
